@@ -23,10 +23,10 @@ jobs:
       # Build Production Images
       - name: "Build Production Docker Image"
         run: | 
-          docker build -t mahfuj007/multi-client -f ./client
-          docker build -t mahfuj007/multi-nginx -f ./nginx
-          docker build -t mahfuj007/multi-server -f ./server
-          docker build -t mahfuj007/multi-worker -f ./worker
+          docker build -t mahfuj007/multi-client ./client
+          docker build -t mahfuj007/multi-nginx ./nginx
+          docker build -t mahfuj007/multi-server ./server
+          docker build -t mahfuj007/multi-worker ./worker
 
       # Login To Docker Hub
       - name: "Login To Docker Hub"
