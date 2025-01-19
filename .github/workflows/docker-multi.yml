@@ -1,0 +1,18 @@
+name: "Docker Multi Container Test And Production Build"
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: "Build Client Docker Image"
+        run: "docker build -t mahfuj007/client-app -f ./client/Dockerfile.dev ./client"
+
+      - name: "Run Test On The Client App"
+        run: "docker run -e CI=true mahfuj007/client-app npm run test"
