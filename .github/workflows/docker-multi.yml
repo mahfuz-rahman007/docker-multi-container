@@ -30,7 +30,8 @@ jobs:
 
       # Login To Docker Hub
       - name: "Login To Docker Hub"
-        env: DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        env: 
+          DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
         run: echo "${DOCKER_HUB_ACCESS_TOKEN}" | docker login -u mahfuj007 --password-stdin
 
       # Push To Docker Hub
