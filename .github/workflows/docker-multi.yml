@@ -9,10 +9,34 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2
+      # Check out the code
+      - name: "Checkout Repository"
+        uses: actions/checkout@v2
       
+      # Build and Test The Client App
       - name: "Build Client Docker Image"
-        run: "docker build -t mahfuj007/client-app -f ./client/Dockerfile.dev ./client"
+        run: "docker build -t mahfuj007/client-test-app -f ./client/Dockerfile.dev ./client"
 
       - name: "Run Test On The Client App"
-        run: "docker run -e CI=true mahfuj007/client-app npm run test"
+        run: "docker run --rm -e CI=true mahfuj007/client-test-app npm run test"
+
+      # Build Production Images
+      - name: "Build Production Docker Image"
+        run: | 
+          docker build -t mahfuj007/multi-client -f ./client
+          docker build -t mahfuj007/multi-nginx -f ./nginx
+          docker build -t mahfuj007/multi-server -f ./server
+          docker build -t mahfuj007/multi-worker -f ./worker
+
+      # Login To Docker Hub
+      - name: "Login To Docker Hub"
+        env: DOCKER_HUB_ACCESS_TOKEN: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+        run: echo "${DOCKER_HUB_ACCESS_TOKEN}" | docker login -u mahfuj007 --password-stdin
+
+      # Push To Docker Hub
+      - name: "Push Images To Docker Hub"
+        run: |
+          docker push mahfuj007/multi-client
+          docker push mahfuj007/multi-nginx
+          docker push mahfuj007/multi-server
+          docker push mahfuj007/multi-worker
